@@ -1,0 +1,24 @@
+note over browser:
+when user clicks on submit button the 
+browser will run previously fetched code from spa.js file
+end note  
+
+browser->browser: fetches notes_form element and register an event handler to handle form submit event;
+
+browser->browser: new event handler creates a note and adds it to the notes list;
+
+note over browser
+new event handler sends new note to server in JSON format
+end note
+browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+ 
+server->browser: HTTP Response : 201 Created
+
+note over browser:
+browser redraws notes element after receiving a 201 code from server 
+(that way it is guaranteed that only notes present on the 
+server will be displayed on the browser)
+end note
+
+
+
