@@ -1,0 +1,45 @@
+note over browser:
+input note text from user is sent to the server
+data is sent as the body of the POST-request
+end note
+
+browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note
+
+note over server:
+server processes received form data: creates a new note object and adds it to an array called notes
+server tells browser to redirect
+end note
+
+server-->browser: 302 Found : URL Redirect
+
+
+
+
+note over browser:
+browser should do a new HTTP GET to the 
+address on the header response from the server 
+end note
+
+
+
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/notes
+server-->browser: HTML-code
+
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+server-->browser: main.css
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.js
+server-->browser: main.js
+
+note over browser:
+browser starts executing js-code
+that requests JSON data from server 
+end note
+
+browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/data.json
+server-->browser: [{ content: "HTML is easy", date: "2019-05-23" }, ...]
+note over browser:
+retreived data from already has the new entry
+end note
+
+
+
