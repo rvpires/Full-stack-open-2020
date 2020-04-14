@@ -1,15 +1,24 @@
-import React, { useState } from 'react'
+import React, { useState , useEffect} from 'react'
 import Phonebook from './components/Phonebook'
 import AddForm from './components/AddForm'
 import SearchFilter from './components/SearchFilter'
+import axios from 'axios'
 
 
-const App = (props) => {
+const App = () => {
 
-  const [persons, setPersons] = useState(props.persons)
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data)
+      })
+  }, [])
 
   const handleSearch = (event) => setSearch(event.target.value)
   const handleNameInput = (event) => setNewName(event.target.value)
