@@ -17,11 +17,14 @@ function App() {
 
   const handleSearch = (event) => setSearch(event.target.value)
 
+  const countriesToShow = countries.filter(country => country.name.toLowerCase().includes(search.toLowerCase()))
+
+
   return (
     <div>
-      Country name <input value={search} onChange={handleSearch}/>
-
-      <CountryList countries={countries}  search={search}/>   
+      
+      Country name <input value={search} onChange={handleSearch}/>        
+      <CountryList countries={countriesToShow}/>   
 
     </div>
   );
