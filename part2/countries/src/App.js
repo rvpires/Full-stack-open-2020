@@ -23,11 +23,14 @@ function App() {
   return (
     <div>
       
-      Country name <input value={search} onChange={handleSearch}/>        
+      Country name <input value={search} onChange={handleSearch}/> 
       <CountryList countries={countriesToShow}/>   
+
 
     </div>
   );
 }
 
 export default App;
+
+

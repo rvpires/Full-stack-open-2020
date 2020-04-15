@@ -1,0 +1,41 @@
+{
+    "request":{
+       "type":"City",
+       "query":"Lisbon, Portugal",
+       "language":"en",
+       "unit":"m"
+    },
+    "location":{
+       "name":"Lisbon",
+       "country":"Portugal",
+       "region":"Lisboa",
+       "lat":"38.717",
+       "lon":"-9.133",
+       "timezone_id":"Europe/Lisbon",
+       "localtime":"2020-04-15 17:51",
+       "localtime_epoch":1586973060,
+       "utc_offset":"1.0"
+    },
+    "current":{
+       "observation_time":"04:51 PM",
+       "temperature":16,
+       "weather_code":116,
+       "weather_icons":[
+          "http://cdn.worldweatheronline.com/images/wsymbols01_png_64/wsymbol_0002_sunny_intervals.png"
+       ],
+       "weather_descriptions":[
+          "Partly cloudy"
+       ],
+       "wind_speed":33,
+       "wind_degree":210,
+       "wind_dir":"SSW",
+       "pressure":1009,
+       "precip":0.9,
+       "humidity":72,
+       "cloudcover":50,
+       "feelslike":16,
+       "uv_index":7,
+       "visibility":10,
+       "is_day":"yes"
+    }
+ }

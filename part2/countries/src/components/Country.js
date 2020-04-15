@@ -1,43 +1,26 @@
-import React , {useState} from 'react'
+import React, { useState } from 'react'
+import CountryDetails from './CountryDetails'
 
-
-const Country = ({country}) =>
-{
+const Country = ({ country }) => {
   const [details, setDetails] = useState(false)
 
-  const showDetails = () =>
+  const showDetails = () => 
   {
     setDetails(!details)
   }
 
-  if(details === true)
+  if (details === false) 
   {
-    return(
-      <div>
-        <h1>{country.name}</h1>
-        <p>Capital City: {country.capital}</p>
-        <p>Population: {country.population}</p>
-  
-        <h1>Languages</h1>
-        <ul>
-          {country.languages.map(languages => <li key={languages.name}>{languages.name}</li>)}
-        </ul>
-  
-        <img src={country.flag} height={200} alt={'country flag'}></img>
-        <p><button onClick={showDetails}>hide</button></p>
-  
-      </div>
-    )
+    return (<p>{country.name} <button onClick={showDetails}>show</button></p>)
+
   }
 
-  else
+  else if (details === true) 
   {
-    return(<p>{country.name} <button onClick={showDetails}>details</button></p>)
+    return (<><p>{country.name} <button onClick={showDetails}>hide</button></p>
+      <CountryDetails country={country} /></>)
+
   }
 }
-
-
- 
-
 
 export default Country
