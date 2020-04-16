@@ -5,8 +5,8 @@ const Weather = ({city}) =>
     const [weather , setWeather] = useState()
     
     const apiKey = process.env.REACT_APP_API_KEY
-      const queryString = 'http://api.weatherstack.com/current?access_key=' + apiKey + '&query=' +city + '&units=m'
-
+    const queryString = 'http://api.weatherstack.com/current?access_key=' + apiKey + '&query=' +city + '&units=m'
+    console.log(queryString)
 
     useEffect(() => {     
       
