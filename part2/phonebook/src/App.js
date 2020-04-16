@@ -1,9 +1,8 @@
 import React, { useState , useEffect} from 'react'
-import Phonebook from './components/Phonebook'
 import AddForm from './components/AddForm'
 import SearchFilter from './components/SearchFilter'
-import axios from 'axios'
-
+import personService from './services/persons'
+import Contact from './components/Contact'
 
 const App = () => {
 
@@ -13,11 +12,7 @@ const App = () => {
   const [search, setSearch] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
-      })
+    personService.getAll().then(response => setPersons(response))
   }, [])
 
   const handleSearch = (event) => setSearch(event.target.value)
@@ -31,18 +26,44 @@ const App = () => {
  
     if (names.includes(newName) === true)
     {
-      var message = `${newName} is already added to phonebook`
-      window.alert(message)      
+      if(window.confirm(`${newName} is already added to phonebook. Want to update number?`))
+      {
+        var person = persons.find(element => element.name === newName)
+        var newPerson = {...person , number : newNumber}
+
+        personService.updatePerson(newPerson).then(response => 
+          {setPersons(persons.map(person => person.id === newPerson.id ? response : person))})
+      }     
     }
+
 
     else
     {
       var newObject = {name : newName , number: newNumber}
-      setPersons(persons.concat(newObject))
-      setNewName('')
-      setNewNumber('')
+
+        personService.addPerson(newObject)
+          .then(response => {
+            setPersons(persons.concat(response))
+            setNewName('')
+            setNewNumber('')
+          })  
     }
   }
+
+  const deletePerson = (id) =>
+  {
+    const name = persons.find(element => element.id === id).name
+
+    if(window.confirm(`Delete ${name}?`))
+    {
+       personService.deletePerson(id)
+       setPersons(persons.filter(element => element.id !== id))
+    }
+  }
+
+
+  const filteredSearch = persons.filter(persons => (persons.name).toLowerCase().includes(search.toLowerCase()))
+
 
   return (
     <div>
@@ -61,9 +82,8 @@ const App = () => {
       /> 
          
       <h2>Numbers</h2>
-      
-      <Phonebook persons={persons} search={search}/>
-    </div>
+      {filteredSearch.map(person => <Contact key={person.id} person={person} deletePerson={() => deletePerson(person.id)}/>)}    
+  </div>
   )
 }
 
