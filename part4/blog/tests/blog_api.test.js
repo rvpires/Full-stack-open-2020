@@ -83,7 +83,6 @@ test('POST a blog with no likes specificed inserts blog with zero likes' , async
 		.expect('Content-Type', /application\/json/)
 
 	const blogs = await api.get('/api/blogs')
-	console.log(blogs.body)
 	expect(blogs.body.length).toBe(helper.initialBlogs.length + 1)
 	const matchBlog = blogs.body.find(blog => blog.title === newBlog.title)
 
@@ -105,7 +104,52 @@ test('POST a blog without title and url outputs 404' , async () => {
 
 })
 
+test('delete a valid note' , async () => {
 
+	let blogs = await api.get('/api/blogs')
+	
+	await api
+		.delete(`/api/blogs/${blogs.body[0].id}`)
+		.expect(204)
+
+	blogs = await api.get('/api/blogs')
+	expect(blogs.body.length).toBe(helper.initialBlogs.length - 1)
+})
+
+
+test('delete a invalid note does not change anything' , async () => {
+
+	let blogs = await api.get('/api/blogs')
+	
+	await api
+		.delete('/api/blogs/nonvalidid')
+		.expect(400)
+
+	blogs = await api.get('/api/blogs')
+	expect(blogs.body.length).toBe(helper.initialBlogs.length)
+})
+
+test('update an existing blog is successful' , async () => {
+
+	let blogs = await api.get('/api/blogs').expect(200)
+
+	let newBlogId = blogs.body[0].id
+
+	let newBlog = {
+		'title': 'test title',
+		'author': 'test author',
+		'url': 'test url',
+		'likes': 5,
+		'id' : newBlogId
+	}	
+
+	await api.put(`/api/blogs/${newBlogId}`).send(newBlog).expect(200)	
+
+	blogs = await api.get('/api/blogs').expect(200)
+
+	expect(blogs.body.find(element => element.id === newBlogId)).toEqual(newBlog)
+
+})
 
 afterAll(() => {
 	mongoose.connection.close()
