@@ -130,15 +130,35 @@ describe('most published author' , () => {
 			'likes': 1
 		}]
 
+	const twoBlogs = [
+		{
+			'title': 'Blog Entry Test1',
+			'author': 'rvp',
+			'url': 'www.example.com',
+			'likes': 10
+		},
+		{
+			'title': 'Blog Entry Test',
+			'author': 'rvpp',
+			'url': 'www.example.com',
+			'likes': 10
+		}]
+
 	test('3 blogs two authors', () => {			
 
 		const result = listHelper.mostBlogs(list)
 		expect(result).toEqual({'author': 'rvp', 'blogs': 2})
 	})
 
+	test('two blogs two authors', () => {			
+
+		const result = listHelper.mostBlogs(twoBlogs)
+		expect(result).toEqual({'author': 'rvp', 'blogs': 1})
+	})
+
 })
 
-describe('favourite author' , () => {
+describe('author with more likes' , () => {
 
 	const list1 = [
 		{
