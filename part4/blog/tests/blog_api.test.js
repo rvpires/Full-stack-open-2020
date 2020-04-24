@@ -59,12 +59,20 @@ describe('add blogs works', () => {
 
 	test('verify that POST a blog works' , async () => {
 
+		
+
+		let users = await api.get('/api/users').expect(200)
+
 		const newBlog = {
 			'title': 'BlogTest',
 			'author': 'AuthorTest',
 			'url': 'www.example1.com',
-			'likes': 0
+			'likes': 0,
+			'user' : users.body[0].id
 		}
+
+
+
 	
 		await api
 			.post('/api/blogs')
@@ -78,18 +86,22 @@ describe('add blogs works', () => {
 		expect(blogs.body.length).toBe(helper.initialBlogs.length + 1)
 	
 		const matchBlog = blogs.body.find(blog => blog.title === newBlog.title)
-		delete(matchBlog.id)
 	
-		expect(matchBlog).toEqual(newBlog)
+		expect(matchBlog.title).toEqual(newBlog.title)
+		expect(matchBlog.author).toEqual(newBlog.author)
+
 	})
 	
 	
 	test('POST a blog with no likes specificed inserts blog with zero likes' , async () => {
 	
+		let users = await api.get('/api/users').expect(200)
+
 		const newBlog = {
 			'title': 'BlogTest',
 			'author': 'AuthorTest',
-			'url': 'www.example1.com'
+			'url': 'www.example1.com',
+			'user' : users.body[0].id
 		}
 	
 		await api
@@ -108,9 +120,13 @@ describe('add blogs works', () => {
 	
 	test('POST a blog without title and url outputs 404' , async () => {
 	
+		let users = await api.get('/api/users').expect(200)
+
 		const newBlog = {
 			'author': 'AuthorTest',
-			'likes' : 10
+			'url': 'www.example1.com',
+			'likes': 0,
+			'user' : users.body[0].id
 		}
 	
 		await api
@@ -232,7 +248,6 @@ describe('update user information', () => {
 			.send(newUser)
 			.expect(400)
 
-		console.log(result.body)
 		expect(result.body.error).toBeDefined()
 
 	})
