@@ -252,9 +252,7 @@ describe('delete and update existing blogs works', () => {
 			.expect('Content-Type', /application\/json/)
 			
 		
-		let blogs = await api.get('/api/blogs')
-		
-		const matchBlog = blogs.body.find(blog => blog.title === newBlog.title)
+		let blogs = await api.get('/api/blogs')		
 
 		await api
 			.delete('/api/blogs/somewrongid')
