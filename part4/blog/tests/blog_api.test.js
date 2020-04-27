@@ -4,11 +4,10 @@ const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
 const User = require('../models/user')
-
 const helper = require('./test_helper')
 
 
-describe('retreiving blogs is correct', () => {
+describe('Retreive blogs', () => {
 
 	beforeEach(async () => {
 
@@ -46,72 +45,78 @@ describe('retreiving blogs is correct', () => {
 })
 
 
-describe('add blogs works', () => {
+describe('Add blogs', () => {
 
 	beforeEach(async () => {
 
-		await Blog.deleteMany({})
-		const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
-		const promises = blogObjects.map(blog => blog.save())
-		await Promise.all(promises)	
+		await Blog.deleteMany({})			
+		await User.deleteMany({})		
+		await api.post('/api/users').send(helper.exampleUser).expect(200)		
 		
 	})
 
-	test('verify that POST a blog works' , async () => {
+	test('verify that POST a blog works' , async () => {		
+
+		const user = helper.exampleUser
+
+		let authToken = await api.post('/api/login')
+			.send({username : user.username , password : user.password})
+			.expect(200)
 
 		
-
-		let users = await api.get('/api/users').expect(200)
-
 		const newBlog = {
 			'title': 'BlogTest',
 			'author': 'AuthorTest',
 			'url': 'www.example1.com',
-			'likes': 0,
-			'user' : users.body[0].id
+			'likes': 0
 		}
 
-
-
-	
 		await api
 			.post('/api/blogs')
+			.set({ 'Authorization': `bearer ${authToken.body.token}`})
 			.send(newBlog)
 			.expect(201)
-			.expect('Content-Type', /application\/json/)
+			.expect('Content-Type', /application\/json/)		
 		
 		
 		const blogs = await api.get('/api/blogs')
 		
-		expect(blogs.body.length).toBe(helper.initialBlogs.length + 1)
+		expect(blogs.body.length).toBe(1)
 	
 		const matchBlog = blogs.body.find(blog => blog.title === newBlog.title)
 	
 		expect(matchBlog.title).toEqual(newBlog.title)
 		expect(matchBlog.author).toEqual(newBlog.author)
 
-	})
-	
+	})	
 	
 	test('POST a blog with no likes specificed inserts blog with zero likes' , async () => {
 	
-		let users = await api.get('/api/users').expect(200)
+		const user = helper.exampleUser
 
+		let authToken = await api.post('/api/login')
+			.send({username : user.username , password : user.password})
+			.expect(200)
+
+		
 		const newBlog = {
 			'title': 'BlogTest',
 			'author': 'AuthorTest',
-			'url': 'www.example1.com',
-			'user' : users.body[0].id
+			'url': 'www.example1.com'
 		}
-	
+
 		await api
 			.post('/api/blogs')
+			.set({ 'Authorization': `bearer ${authToken.body.token}`})
 			.send(newBlog)
 			.expect(201)
-			.expect('Content-Type', /application\/json/)
-	
+			.expect('Content-Type', /application\/json/)		
+		
+		
 		const blogs = await api.get('/api/blogs')
-		expect(blogs.body.length).toBe(helper.initialBlogs.length + 1)
+		
+		expect(blogs.body.length).toBe(1)
+	
 		const matchBlog = blogs.body.find(blog => blog.title === newBlog.title)
 	
 		expect(matchBlog.likes).toEqual(0)
@@ -120,21 +125,61 @@ describe('add blogs works', () => {
 	
 	test('POST a blog without title and url outputs 404' , async () => {
 	
-		let users = await api.get('/api/users').expect(200)
+		const user = helper.exampleUser
 
+		let authToken = await api.post('/api/login')
+			.send({username : user.username , password : user.password})
+			.expect(200)
+
+		
 		const newBlog = {
 			'author': 'AuthorTest',
 			'url': 'www.example1.com',
-			'likes': 0,
-			'user' : users.body[0].id
+			'likes' : 10
 		}
+
+		await api
+			.post('/api/blogs')
+			.set({ 'Authorization': `bearer ${authToken.body.token}`})
+			.send(newBlog)
+			.expect(400)		
 	
+	})
+
+	test('add a blog without token' , async () => {
+
+		const newBlog = {
+			'title': 'BlogTest',
+			'author': 'AuthorTest',
+			'url': 'www.example1.com',
+			'likes': 0
+		}
+
+		await api
+			.post('/api/blogs')
+			.set({ 'Authorization': 'bearer thisisnotavalidtoken'})
+			.send(newBlog)
+			.expect(401)
+
+	})
+
+	test('add a blog with incorrect token' , async () => {
+
+		const newBlog = {
+			'title': 'BlogTest',
+			'author': 'AuthorTest',
+			'url': 'www.example1.com',
+			'likes': 0
+		}
+
 		await api
 			.post('/api/blogs')
 			.send(newBlog)
-			.expect(400)
-	
+			.expect(401)
+
 	})
+
+
 })
 
 describe('delete and update existing blogs works', () => {
@@ -145,6 +190,8 @@ describe('delete and update existing blogs works', () => {
 		const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
 		const promises = blogObjects.map(blog => blog.save())
 		await Promise.all(promises)	
+		
+
 		
 	})
 

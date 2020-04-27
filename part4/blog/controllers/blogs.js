@@ -39,9 +39,6 @@ blogRouter.post('/', async (request, response) => {
 	await user.save()
 	response.status(201).json(savedBlog.toJSON())
 
-
-
-
 })
 
 

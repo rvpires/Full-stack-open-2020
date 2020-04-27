@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs/
 content-type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJ2cCIsImlkIjoiNWVhMzAxYzE0MGY2NmYzZTZhM2ZjYWRiIiwiaWF0IjoxNTg3NzQ3MDkzfQ.uAeCy9uxfOROqluCkJproELuDbtYYTwv-c_ZHImHnFY
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOiI1ZWEzMjM4MzE5ZWEzYTVlYzM3NTBhNzgiLCJpYXQiOjE1ODc3NDk3OTN9.wtY6QwkiDG32pYipxGJjncgPa3yx3p4Su7TvojzpL14
 
 {
-		"title": "Blog Exaaaasdasdampl1111asdase 111",
-		"author": "Exasdasampleasdasd Author 11",
-		"url": "www.exasdasdasampadsadle1.com111111",
+		"title": "Blog Example",
+		"author": "Example Author 11",
+		"url": "www.example.com",
 		"likes": 5
 }
