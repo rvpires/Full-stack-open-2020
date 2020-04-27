@@ -186,59 +186,121 @@ describe('delete and update existing blogs works', () => {
 
 	beforeEach(async () => {
 
-		await Blog.deleteMany({})
-		const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
-		const promises = blogObjects.map(blog => blog.save())
-		await Promise.all(promises)	
-		
-
+		await Blog.deleteMany({})			
+		await User.deleteMany({})		
+		await api.post('/api/users').send(helper.exampleUser).expect(200)
 		
 	})
 
 	test('delete a valid blog' , async () => {
 
+		const user = helper.exampleUser
+
+		let authToken = await api.post('/api/login')
+			.send({username : user.username , password : user.password})
+			.expect(200)
+		
+		const newBlog = {
+			'title': 'BlogTest',
+			'author': 'AuthorTest',
+			'url': 'www.example1.com',
+			'likes': 0
+		}
+	
+		await api
+			.post('/api/blogs')
+			.set({ 'Authorization': `bearer ${authToken.body.token}`})
+			.send(newBlog)
+			.expect(201)
+			.expect('Content-Type', /application\/json/)
+			
+		
 		let blogs = await api.get('/api/blogs')
 		
+		const matchBlog = blogs.body.find(blog => blog.title === newBlog.title)
+
 		await api
-			.delete(`/api/blogs/${blogs.body[0].id}`)
+			.delete(`/api/blogs/${matchBlog.id}`)
+			.set({ 'Authorization': `bearer ${authToken.body.token}`})
 			.expect(204)
 	
 		blogs = await api.get('/api/blogs')
-		expect(blogs.body.length).toBe(helper.initialBlogs.length - 1)
+		expect(blogs.body.length).toBe(0)
 	})
 	
 	
-	test('delete a invalid blog does not change anything' , async () => {
+	test('delete a invalid blog' , async () => {
 	
+		const user = helper.exampleUser
+
+		let authToken = await api.post('/api/login')
+			.send({username : user.username , password : user.password})
+			.expect(200)
+		
+		const newBlog = {
+			'title': 'BlogTest',
+			'author': 'AuthorTest',
+			'url': 'www.example1.com',
+			'likes': 0
+		}
+	
+		await api
+			.post('/api/blogs')
+			.set({ 'Authorization': `bearer ${authToken.body.token}`})
+			.send(newBlog)
+			.expect(201)
+			.expect('Content-Type', /application\/json/)
+			
+		
 		let blogs = await api.get('/api/blogs')
 		
+		const matchBlog = blogs.body.find(blog => blog.title === newBlog.title)
+
 		await api
-			.delete('/api/blogs/nonvalidid')
+			.delete('/api/blogs/somewrongid')
+			.set({ 'Authorization': `bearer ${authToken.body.token}`})
 			.expect(400)
 	
 		blogs = await api.get('/api/blogs')
-		expect(blogs.body.length).toBe(helper.initialBlogs.length)
+		expect(blogs.body.length).toBe(1)
 	})
 	
-	test('update an existing blog is successful' , async () => {
+	test('update an existing blog' , async () => {
 	
-		let blogs = await api.get('/api/blogs').expect(200)
+		const user = helper.exampleUser
+
+		let authToken = await api.post('/api/login')
+			.send({username : user.username , password : user.password})
+			.expect(200)
+		
+		const newBlog = {
+			'title': 'BlogTest',
+			'author': 'AuthorTest',
+			'url': 'www.example1.com',
+			'likes': 0
+		}
 	
-		let newBlogId = blogs.body[0].id
+		await api
+			.post('/api/blogs')
+			.set({ 'Authorization': `bearer ${authToken.body.token}`})
+			.send(newBlog)
+			.expect(201)
+			.expect('Content-Type', /application\/json/)
+			
+		
+		let blogs = await api.get('/api/blogs')
 	
-		let newBlog = {
-			'title': 'test title',
-			'author': 'test author',
-			'url': 'test url',
-			'likes': 5,
-			'id' : newBlogId
-		}	
+		const newBlogUpdated = newBlog
+		
+		newBlogUpdated.title = 'DifferentTitle'
+
+		let newBlogId = blogs.body[0].id		
 	
-		await api.put(`/api/blogs/${newBlogId}`).send(newBlog).expect(200)	
+		await api.put(`/api/blogs/${newBlogId}`).send(newBlogUpdated).expect(200)	
 	
 		blogs = await api.get('/api/blogs').expect(200)
 	
-		expect(blogs.body.find(element => element.id === newBlogId)).toEqual(newBlog)
+		expect(blogs.body.find(element => element.id === newBlogId).title).toEqual(newBlogUpdated.title)
 	
 	})
 
