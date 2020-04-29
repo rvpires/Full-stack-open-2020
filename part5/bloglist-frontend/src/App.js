@@ -92,7 +92,18 @@ const App = () => {
 
   }
 
+  const updateBlog = async (blog) => {
 
+    try {     
+      const result = await blogService.update(blog)
+      sendNotification(`New blog ${blog.title} by ${blog.author} was updated successfuly.`, 'success')
+
+    }
+    catch (exception) {
+      sendNotification('Could not update blog.', 'error')
+    }
+
+  }
 
 
   if (user === null) {
@@ -127,7 +138,7 @@ const App = () => {
         </div>
       </Togglable>
 
-      {blogs.map(blog => <Blog key={blog.id} blog={blog} />)}
+      {blogs.map(blog => <Blog key={blog.id} blog={blog} updateBlog={updateBlog}/>)}
 
     </div>
   )

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog , updateBlog}) => {
 
   const blogStyle = {
     paddingTop: 10,
@@ -28,9 +28,23 @@ const Blog = ({ blog }) => {
 
   const showWhenVisible = { display: details ? '' : 'none' }
 
+ 
+  const likeBlog = async (event) =>
+	{
+		event.preventDefault()
+    
+    const newBlog = blog
+
+    newBlog.likes++
+		console.log(newBlog)
+
+		updateBlog(newBlog)
+
+		
+
+	}
 
   return (
-
 
     <div style={blogStyle}>
       
@@ -40,12 +54,11 @@ const Blog = ({ blog }) => {
 
       <div style={showWhenVisible}>
         <p>{blog.url} </p>
-        <p>{blog.likes} <button>like</button></p>
+        <p>{blog.likes} <button onClick={likeBlog}>like</button></p>
         <p>{blog.author}</p>
       </div>
 
     </div>
-
   )
 }
 
