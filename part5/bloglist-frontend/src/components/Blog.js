@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
-const Blog = ({ blog , updateBlog}) => {
+const Blog = ({ blog , updateBlog, deleteBlog, user}) => {
+
 
   const blogStyle = {
     paddingTop: 10,
@@ -13,6 +14,7 @@ const Blog = ({ blog , updateBlog}) => {
 
   const [details, setDetails] = useState(false)
   const [buttonText, setButtonText] = useState('view')
+
 
   const toggleDetails = () => {
     if (details === true) {
@@ -27,22 +29,24 @@ const Blog = ({ blog , updateBlog}) => {
   }
 
   const showWhenVisible = { display: details ? '' : 'none' }
+  const showDelete = { display: blog.user.username === user.username  ? '' : 'none' }
 
- 
+
   const likeBlog = async (event) =>
 	{
-		event.preventDefault()
-    
+		event.preventDefault()    
     const newBlog = blog
-
     newBlog.likes++
-		console.log(newBlog)
+		updateBlog(newBlog)	
 
-		updateBlog(newBlog)
+  }
+  
+  const eraseBlog = async (event) =>
+  {
+      event.preventDefault()   
+      deleteBlog(blog) 
 
-		
-
-	}
+  }
 
   return (
 
@@ -53,11 +57,12 @@ const Blog = ({ blog , updateBlog}) => {
       </div>
 
       <div style={showWhenVisible}>
-        <p>{blog.url} </p>
-        <p>{blog.likes} <button onClick={likeBlog}>like</button></p>
-        <p>{blog.author}</p>
+        {blog.url} <br />
+        {blog.likes} <button onClick={likeBlog}>like</button><br />
+        {blog.author}<br />
+      <div style={showDelete} >        
+        <button onClick={eraseBlog}>delete</button></div>
       </div>
-
     </div>
   )
 }

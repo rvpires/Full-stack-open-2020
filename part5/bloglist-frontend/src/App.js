@@ -20,11 +20,24 @@ const App = () => {
 
   const addFormRef = React.createRef()
 
-  useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs)
-    )
-  }, [])
+  const sortBlogs = blogs => {
+
+    const orderFunction = (a, b) => {
+      if (a.likes > b.likes) {
+        return -1
+      }
+      if (a.likes < b.likes) {
+        return 1
+      }
+
+      return 0
+    }
+
+    return (blogs.sort(orderFunction))
+  }
+
+
+  useEffect(() => { blogService.getAll().then(blogs => { setBlogs(sortBlogs(blogs)) }) }, [])
 
   useEffect(() => {
 
@@ -71,10 +84,11 @@ const App = () => {
 
   const createBlog = async (blog) => {
 
-    try {     
+    try {
       addFormRef.current.toggleVisibility()
       const result = await blogService.create(blog)
-      setBlogs(blogs.concat(result))
+      result.user = user
+      setBlogs(sortBlogs(blogs.concat(result)))
       sendNotification(`New blog ${blog.title} by ${blog.author} was created successfuly.`, 'success')
 
     }
@@ -94,14 +108,37 @@ const App = () => {
 
   const updateBlog = async (blog) => {
 
-    try {     
+    try {
+
       const result = await blogService.update(blog)
+      let newBlogs = blogs.filter(blog => blog.id !== result.id)
+      setBlogs(sortBlogs(newBlogs.concat(blog)))
       sendNotification(`New blog ${blog.title} by ${blog.author} was updated successfuly.`, 'success')
 
     }
     catch (exception) {
       sendNotification('Could not update blog.', 'error')
     }
+
+  }
+
+  const deleteBlog = async (blog) => {
+
+    try {
+
+      if (window.confirm(`Delete ${blog.title} by ${blog.author}?`)) {
+        await blogService.deleteBlog(blog)
+        let newBlogs = blogs.filter(element => element.id !== blog.id)
+        setBlogs(newBlogs)
+        sendNotification(`${blog.title} by ${blog.author} was deleted successfuly.`, 'success')
+      }
+
+
+    }
+    catch (exception) {
+      sendNotification('Could not delete blog.', 'error')
+    }
+
 
   }
 
@@ -124,7 +161,7 @@ const App = () => {
 
   return (
     <div>
-      
+
       <h2>blogs</h2>
 
       <p>{user.username} logged in <button onClick={logOut}>logout</button></p>
@@ -138,7 +175,7 @@ const App = () => {
         </div>
       </Togglable>
 
-      {blogs.map(blog => <Blog key={blog.id} blog={blog} updateBlog={updateBlog}/>)}
+      {blogs.map(blog => <Blog key={blog.id} blog={blog} updateBlog={updateBlog} deleteBlog={deleteBlog} user={user} />)}
 
     </div>
   )

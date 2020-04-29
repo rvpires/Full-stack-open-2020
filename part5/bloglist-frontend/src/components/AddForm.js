@@ -13,9 +13,8 @@ const AddForm = ({createBlog}) => {
       	{
         'title': title,
         'author': author,
-		'url': url
-		
-		  }
+		'url': url		
+		}
 		  
 
 		createBlog(newBlog)
