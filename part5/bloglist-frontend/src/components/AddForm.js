@@ -1,21 +1,19 @@
-import React , {useState} from 'react'
+import React, { useState } from 'react'
 
-const AddForm = ({createBlog}) => {
+const AddForm = ({ createBlog }) => {
 
 	const [title, setTitle] = useState('')
-  	const [author, setAuthor] = useState('')
-  	const [url, setUrl] = useState('')
+	const [author, setAuthor] = useState('')
+	const [url, setUrl] = useState('')
 
-	const addBlog = async (event) =>
-	{
+	const addBlog = async (event) => {
 		event.preventDefault()
-		const newBlog =
-      	{
-        'title': title,
-        'author': author,
-		'url': url		
+		const newBlog = {
+			'title': title,
+			'author': author,
+			'url': url
 		}
-		  
+
 
 		createBlog(newBlog)
 
@@ -30,7 +28,7 @@ const AddForm = ({createBlog}) => {
 		<form onSubmit={addBlog}>
 			<div>
 				title:
-            <input
+				<input
 					type="text"
 					value={title}
 					name="Title"
@@ -39,7 +37,7 @@ const AddForm = ({createBlog}) => {
 			</div>
 			<div>
 				author:
-            <input
+				<input
 					type="text"
 					value={author}
 					name="Author"
@@ -48,7 +46,7 @@ const AddForm = ({createBlog}) => {
 			</div>
 			<div>
 				url:
-            <input
+				<input
 					type="text"
 					value={url}
 					name="Url"
