@@ -17,34 +17,56 @@ const asObject = (anecdote) => {
   }
 }
 
+const sortAnecdotes = anecdotes => {
+
+  let a = anecdotes
+
+  //Descendent Bubble-Sort O(n²)
+  for (let i = 0; i < a.length - 1; i++) {
+
+    for (let j = 0; j < a.length - i - 1; j++) {
+
+      if (a[j].votes < a[j + 1].votes) {
+        let temp = a[j]
+        a[j] = a[j + 1]
+        a[j + 1] = temp
+      }
+    }
+  }
+  return (a)
+}
+
 const initialState = anecdotesAtStart.map(asObject)
 
 const reducer = (state = initialState, action) => {
   console.log('state now: ', state)
   console.log('action', action)
 
-  switch(action.type) {
-    case 'VOTE':    
+  switch (action.type) {
+    case 'VOTE':
       const id = action.data.id
-
       const anecdoteToChange = state.find(n => n.id === id)
 
-      const changedAnecdote = { 
-        ...anecdoteToChange, 
+      const changedAnecdote = {
+        ...anecdoteToChange,
         votes: anecdoteToChange.votes + 1
       }
 
-      return state.map(note =>
-        note.id !== id ? note : changedAnecdote 
-      )
+      return sortAnecdotes(state.map(note => note.id !== id ? note : changedAnecdote))
+
+    case 'ADD':
+      return [...state, asObject(action.data.anecdote)]
     default:
       return state
   }
 }
 
-export const voteAnecdote = (id) =>
-{
-  return({type: 'VOTE' , data : {id}})
+export const voteAnecdote = (id) => {
+  return ({ type: 'VOTE', data: { id } })
+}
+
+export const addAnecdote = (anecdote) => {
+  return ({ type: 'ADD', data: { anecdote } })
 }
 
 export default reducer
