@@ -1,4 +1,4 @@
-import React , {useEffect} from 'react'
+import React , { useEffect } from 'react'
 import AnecdoteForm from './components/AnecdoteForm'
 import AnecdoteList from './components/AnecdoteList'
 import Notification from './components/Notification'
@@ -7,23 +7,23 @@ import { useDispatch } from 'react-redux'
 import { initializeAnecdotes } from './reducers/anecdoteReducer'
 const App = () => {
 
-  const dispatch = useDispatch()
+	const dispatch = useDispatch()
 
-  useEffect(() => {
-    dispatch(initializeAnecdotes())
-  }, [dispatch])
+	useEffect(() => {
+		dispatch(initializeAnecdotes())
+	}, [dispatch])
 
-  return (
-    <div>
-      <h1>Anecdotes</h1>
-      <Notification />
-      <AnecdoteFilter />
-      <AnecdoteList />
-      <AnecdoteForm />
+	return (
+		<div>
+			<h1>Anecdotes</h1>
+			<Notification />
+			<AnecdoteFilter />
+			<AnecdoteList />
+			<AnecdoteForm />
 
 
-    </div>
-  )
+		</div>
+	)
 }
 
 export default App

@@ -2,11 +2,11 @@ const filterReducer = (state = '', action) => {
 
 	switch (action.type) {
 
-		case 'SET_FILTER':
-			return action.input
+	case 'SET_FILTER':
+		return action.input
 
-		default:
-			return state
+	default:
+		return state
 	}
 }
 
