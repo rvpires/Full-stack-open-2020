@@ -44,7 +44,7 @@ const anecdoteReducer = (state = [], action) => {
 		return [...state, action.anecdote]
 
 	case 'INIT':
-		return action.anecdotes
+		return sortAnecdotes(action.anecdotes)
 
 	default:
 		return state
@@ -57,8 +57,7 @@ export const voteAnecdote = (id) => {
 	return async dispatch => {
 
 		const newAnecdote = await anecdoteService.vote(id)
-		console.log(newAnecdote)
-		dispatch({ type: 'VOTE', data: { id } })
+		dispatch({ type: 'VOTE', data: { id : newAnecdote.id } })
 
 
 	}
@@ -68,10 +67,8 @@ export const createAnecdote = (content) => {
 
 	return async dispatch => {
 
-		console.log(content)
 
 		const newAnecdote = await anecdoteService.addAnecdote(content)
-		console.log(newAnecdote)
 		dispatch({ type: 'ADD', anecdote: newAnecdote })
 	}
 

@@ -31,8 +31,6 @@ const AnecdoteForm = (props) => {
 }
 
 const mapStateToProps = (state) => {
-	// sometimes it is useful to console log from mapStateToProps
-	console.log(state)
 	return {
 		anecdotes: state.anecdotes
 	}

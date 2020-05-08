@@ -1,3 +1,5 @@
+let timeoutArr = []
+
 const notificationReducer = (state = '', action) => {
 
 	switch (action.type) {
@@ -6,28 +8,22 @@ const notificationReducer = (state = '', action) => {
 		return ''
 
 	case 'SHOW':
-		return action.data.text
+		timeoutArr.forEach(element => clearTimeout(element))
+		return action.data.notification
 	default:
 		return state
 	}
 }
 
 
-export const showNotification = (text) => {
-	return ({ type: 'SHOW', data: { text } })
-}
 
-export const hideNotification = () => {
-	return ({ type: 'HIDE', data: {} })
-}
 
-export const setNotification = (notification, timeLimit) =>
-{
-	return async dispatch =>
-	{
-		dispatch(showNotification(notification))
-		setTimeout(() => {dispatch(hideNotification())}, timeLimit*1000)
+export const setNotification = (notification, timeLimit) => {
+	return async dispatch => {
 
+		dispatch(({ type: 'SHOW', data: { notification } }))
+		const timeoutId = setTimeout(() => { dispatch({ type: 'HIDE', data: { timeoutId } }) }, timeLimit * 1000)
+		timeoutArr = timeoutArr.concat([timeoutId])
 	}
 }
 
