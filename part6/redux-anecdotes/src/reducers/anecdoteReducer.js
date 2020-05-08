@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import anecdoteService from '../services/anecdotes'
 
 
@@ -22,19 +23,21 @@ const sortAnecdotes = anecdotes => {
 
 
 const anecdoteReducer = (state = [], action) => {
+
 	console.log('state now: ', state)
 	console.log('action', action)
 
-	const id = action.data.id
-	const anecdoteToChange = state.find(n => n.id === id)
 
-	const changedAnecdote = {
-		...anecdoteToChange,
-		votes: anecdoteToChange.votes + 1
-	}
 	switch (action.type) {
 
 	case 'VOTE':
+		const id = action.data.id
+		const anecdoteToChange = state.find(n => n.id === id)
+
+		const changedAnecdote = {
+			...anecdoteToChange,
+			votes: anecdoteToChange.votes + 1
+		}
 		return sortAnecdotes(state.map(note => note.id !== id ? note : changedAnecdote))
 
 	case 'ADD':
