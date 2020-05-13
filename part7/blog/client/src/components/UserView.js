@@ -1,12 +1,15 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import lodash from 'lodash'
+import { Link } from 'react-router-dom'
+
 const UserView = () => {
+
 	const blogs = useSelector(state => state.blogs)
 
-	let a = lodash.uniqBy(blogs.map(blog => blog.user), e => e.id)
+	let uniqueUsers = lodash.uniqBy(blogs.map(blog => blog.user), e => e.id)
 
-	a.forEach(user => {
+	uniqueUsers.forEach(user => {
 
 		let count = 0
 
@@ -21,7 +24,7 @@ const UserView = () => {
 
 	})
 
-	console.log(a)
+
 
 	return (
 		<div>
@@ -33,12 +36,14 @@ const UserView = () => {
 						<th>blogs created</th>
 
 					</tr>
-					{a.map(a => {
+					{uniqueUsers.map(user => {
+
+						const link = `/users/${user.id}`
 
 						return (
-							<tr key={a.id}>
-								<td>{a.name}</td>
-								<td>{a.blogCount}</td>
+							<tr key={user.id}>
+								<td><Link to={link}>{user.name}</Link></td>
+								<td>{user.blogCount}</td>
 
 							</tr>
 						)
