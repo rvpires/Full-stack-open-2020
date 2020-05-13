@@ -1,7 +1,8 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { login } from '../reducers/loginReducer'
-
+import './LoginForm.css'
+import loginIcon from '../images/interface.png'
 const LoginForm = () => {
 
 
@@ -16,17 +17,20 @@ const LoginForm = () => {
 	}
 
 	return (
-		<form onSubmit={handleLogin}>
-			<div>
-				username
-				<input type="text" name="username"/>
-			</div>
-			<div>
-				password
-				<input	type="password"	name="password"/>
-			</div>
-			<button id="login-button" type="submit">login</button>
-		</form>
+		<div className="login-form">
+			<img src={loginIcon}></img>
+			<form onSubmit={handleLogin}>
+				<div>
+					<input type="text" name="username" placeholder="username"/>
+				</div>
+				<div>
+					<input	type="password"	name="password" placeholder="password"/>
+				</div>
+				<button className='submit-button' id="login-button" type="submit">login</button>
+			</form>
+
+		</div>
+
 	)
 }
 

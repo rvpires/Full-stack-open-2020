@@ -33,7 +33,6 @@ const App = () => {
 	if (!user) {
 		return (
 			<div>
-				<h1>login into application</h1>
 				<Notification />
 				<LoginForm />
 			</div>

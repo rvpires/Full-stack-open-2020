@@ -17,3 +17,7 @@
     padding: 10px;
     margin-bottom: 10px;
   }
+
+  * {background-color:  rgb(39, 73, 138);
+    font-family: 'Fira Code', monospace;
+    }
