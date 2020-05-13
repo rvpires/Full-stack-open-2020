@@ -1,11 +1,7 @@
-POST http://localhost:3001/api/blogs/
+POST http://localhost:3001/api/blogs/5ebc216e53914d2ef388bf3e/comments
 content-type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOiI1ZWEzMjM4MzE5ZWEzYTVlYzM3NTBhNzgiLCJpYXQiOjE1ODgwMDAxOTB9.kf1GxRIfF9eET1cS3wv2TQmv2SkHorUqcrPJMV8aIeo
 
 {
-		"title": "Blog Example",
-		"author": "Example Author 11",
-		"url": "www.example.com",
-		"likes": 5,
-		"comments" : ["top" , "not so top"]
+		"comment" : "well well"
 }

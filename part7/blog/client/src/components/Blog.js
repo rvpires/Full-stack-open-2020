@@ -1,5 +1,5 @@
 import React from 'react'
-import { updateBlog, deleteBlog } from '../reducers/blogReducer'
+import { updateBlog, deleteBlog , addComment } from '../reducers/blogReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 
@@ -28,8 +28,23 @@ const Blog = ({ blog }) => {
 
 	}
 
-	console.log(blog.user , user)
 	const showDelete = { display: blog.user.username === user.username ? '' : 'none' }
+
+	const randomId = () =>
+	{
+		return(Math.round(Math.random()*1000))
+	}
+
+	const handleSubmit = async (event) =>
+	{
+		event.preventDefault()
+		const comment = event.target.comment.value
+		dispatch(addComment(blog.id , comment))
+		event.target.comment.value = ''
+
+
+
+	}
 
 	return(
 		<div>
@@ -41,27 +56,20 @@ const Blog = ({ blog }) => {
 				<div style={showDelete} >
 					<button onClick={eraseBlog}>delete</button></div>
 			</div>
+			<div>
+				<h2>comments</h2>
+				<ul>
+					{blog.comments.map(comment => <li key={randomId()}>{comment}</li>)}
+				</ul>
+				<form onSubmit={handleSubmit}>
+					<input name='comment'/>
+					<button>add comment</button>
+				</form>
+
+			</div>
 
 		</div>
 	)
-
-
-	/*eturn (
-		<div className='Blog' style={blogStyle}>
-
-			<div>
-				{blog.title} {blog.author} <button onClick={toggleDetails}>{buttonText}</button>
-			</div>
-
-			<div className='togglableContent' style={showWhenVisible}>
-				{blog.url} <br />
-				{blog.likes} <button onClick={likeBlog}>like</button><br />
-				{blog.author}<br />
-				<div style={showDelete} >
-					<button onClick={eraseBlog}>delete</button></div>
-			</div>
-		</div>
-	)*/
 }
 
 
