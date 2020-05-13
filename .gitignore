@@ -12,7 +12,8 @@
 /part7/routed-anecdotes/node_modules
 /part7/country-hook/node_modules
 /part7/ultimate-hooks/node_modules
-
+/part7/blog/server/node_modules
+/part7/blog/client/node_modules
 /part2/countries/.env
 /part7/blog/server/.env
 /part3/fullstackopen2020-part3/.env
