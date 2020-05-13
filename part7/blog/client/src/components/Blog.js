@@ -1,41 +1,20 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { updateBlog, deleteBlog } from '../reducers/blogReducer'
 import { useDispatch, useSelector } from 'react-redux'
 
 
 const Blog = ({ blog }) => {
 
-
-	const blogStyle = {
-		paddingTop: 10,
-		paddingLeft: 2,
-		border: 'solid',
-		borderWidth: 1,
-		marginBottom: 5
-	}
-
-
-	const [details, setDetails] = useState(false)
-	const [buttonText, setButtonText] = useState('view')
 	const user = useSelector(state => state.user)
 
 	const dispatch = useDispatch()
 
-	const toggleDetails = () => {
-		if (details === true) {
-			setDetails(false)
-			setButtonText('view')
-		}
-
-		else if (details === false) {
-			setDetails(true)
-			setButtonText('hide')
-		}
+	if(!blog)
+	{
+		return null
 	}
 
-	const showWhenVisible = { display: details ? '' : 'none' }
-	const showDelete = { display: blog.user.username === user.username ? '' : 'none' }
-	//const showDelete = {display : ''}
+
 	const likeBlog = async (event) => {
 		event.preventDefault()
 		const newBlog = blog
@@ -49,8 +28,25 @@ const Blog = ({ blog }) => {
 
 	}
 
+	console.log(blog.user , user)
+	const showDelete = { display: blog.user.username === user.username ? '' : 'none' }
 
-	return (
+	return(
+		<div>
+			<h1>{blog.title} by {blog.author}</h1>
+			<div>
+				<a href={blog.url}>{blog.url}</a> <br />
+				{blog.likes} <button onClick={likeBlog}>like</button><br />
+				added by {blog.user.name}<br />
+				<div style={showDelete} >
+					<button onClick={eraseBlog}>delete</button></div>
+			</div>
+
+		</div>
+	)
+
+
+	/*eturn (
 		<div className='Blog' style={blogStyle}>
 
 			<div>
@@ -65,7 +61,7 @@ const Blog = ({ blog }) => {
 					<button onClick={eraseBlog}>delete</button></div>
 			</div>
 		</div>
-	)
+	)*/
 }
 
 
