@@ -33,7 +33,6 @@ const App = () => {
 	if (!user) {
 		return (
 			<div>
-				<Notification />
 				<LoginForm />
 			</div>
 		)
@@ -43,6 +42,8 @@ const App = () => {
 		return (
 			<div>
 				<h1>Blogs</h1>
+				<Notification />
+
 				<Router>
 				<Menu />
 
@@ -61,8 +62,6 @@ const App = () => {
 
 						<Route path='/'>
 							<div>
-								<Notification />
-								<h2>create new</h2>
 								<AddForm />
 								<BlogList />
 							</div>

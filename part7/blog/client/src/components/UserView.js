@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import lodash from 'lodash'
 import { Link } from 'react-router-dom'
+import { Table } from 'react-bootstrap'
 
 const UserView = () => {
 
@@ -27,9 +28,9 @@ const UserView = () => {
 
 
 	return (
-		<div>
+		<div className="container">
 			<h1>Users</h1>
-			<table>
+			<Table striped>
 				<tbody>
 					<tr>
 						<th></th>
@@ -55,7 +56,7 @@ const UserView = () => {
 
 
 
-			</table>
+			</Table>
 		</div>
 	)
 

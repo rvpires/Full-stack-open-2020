@@ -6,11 +6,17 @@ const BlogList = () => {
 	const blogStyle = {
 		paddingTop: 10,
 		paddingLeft: 2,
-		border: 'solid',
-		borderWidth: 1,
-		marginBottom: 5
-	}
+		border: 'none',
+		marginBottom: 5,
 
+	}
+	
+	const linkStyle =
+	{
+		color : 'black',
+		fontSize : '20px',
+		fontWeight : 'bold'
+	}
 	const blogs = useSelector(state => state.blogs)
 
 	return (
@@ -21,7 +27,7 @@ const BlogList = () => {
 
 				return (
 					<div key={blog.id} style={blogStyle}>
-						<Link to={link}> {blog.title} by {blog.author}</Link>
+						<Link style={linkStyle} to={link}> {blog.title} by {blog.author}</Link>
 					</div>
 
 

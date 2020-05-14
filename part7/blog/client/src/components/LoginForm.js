@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux'
 import { login } from '../reducers/loginReducer'
 import './LoginForm.css'
 import loginIcon from '../images/interface.png'
+import Notification from './Notification'
+
 const LoginForm = () => {
 
 
@@ -19,6 +21,7 @@ const LoginForm = () => {
 	return (
 		<div className="login-form">
 			<img src={loginIcon}></img>
+			<Notification />
 			<form onSubmit={handleLogin}>
 				<div>
 					<input type="text" name="username" placeholder="username"/>
