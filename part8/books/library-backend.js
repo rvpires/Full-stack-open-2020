@@ -185,10 +185,19 @@ const resolvers = {
 
 		editAuthor: (root, args) =>
 		{
-			let newAuthor = {name: args.name , born : args.setBornTo}
-			authors = [...authors , newAuthor]
-			return newAuthor
+			let foundAuthor = authors.find(author => author.name === args.name)
+
+			if(foundAuthor)
+			{
+				let newAuthor = {name: args.name , born : args.setBornTo}
+				authors = authors.map(author => author.name === args.name ? newAuthor : author)
+				return newAuthor
+			}
+
+			return null
+
 		}
+			
 	}
 }
 
