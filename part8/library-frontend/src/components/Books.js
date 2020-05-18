@@ -1,5 +1,6 @@
 import React from 'react'
 import { gql, useQuery } from '@apollo/client'
+ 
 
 
 const ALL_BOOKS = gql`
@@ -15,7 +16,7 @@ query
 
 const Books = (props) => {
 
-  const result = useQuery(ALL_BOOKS)
+  const result = useQuery(ALL_BOOKS , { pollInterval: 2000 })
 
   if (!props.show) {
     return null
