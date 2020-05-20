@@ -9,9 +9,8 @@ mutation createBook($title : String! , $author : String! , $published : Int! , $
     published: $published,
     genres: $genres
   ) {
-    title,
-    author
-  }
+    title
+    }
 }
 
 
@@ -25,7 +24,7 @@ const NewBook = (props) => {
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
 
-  const [ createBook ] = useMutation(CREATE_BOOK)
+  const [ createBook ] = useMutation(CREATE_BOOK) 
 
 
   if (!props.show) {

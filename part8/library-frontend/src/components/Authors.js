@@ -29,10 +29,11 @@ mutation changeYear($name : String! , $setBornTo : Int!){
 
 const Authors = (props) => {
 
-  const result = useQuery(ALL_AUTHORS, { pollInterval: 2000 })
+  const result = useQuery(ALL_AUTHORS)
   const [name, setName] = useState('')
   const [born, setBorn] = useState('')
-  const [changeYear] = useMutation(CHANGE_YEAR)
+  const [changeYear] = useMutation(CHANGE_YEAR, {
+    refetchQueries: [  {query: ALL_AUTHORS} ]})
 
 
   if (result.loading) {
@@ -46,7 +47,6 @@ const Authors = (props) => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    console.log(name, typeof (Number(born)))
     changeYear({ variables: { name, setBornTo: Number(born) } })
   }
 
@@ -77,9 +77,8 @@ const Authors = (props) => {
       <h2>Set birthday year</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <select onChange={({ target }) => setName(target.value)}
-          >
-            {authors.map(author => <option value={author.name}>{author.name}</option>)}
+          <select onChange={({ target }) => setName(target.value)}>
+            {authors.map(author => <option key={author.name} value={author.name}>{author.name}</option>)}
           </select>
         </div>
         <div>
@@ -92,11 +91,6 @@ const Authors = (props) => {
         <button type="submit">submit</button>
 
       </form>
-
-
-
-      <button onClick={() => console.log(name)}>aaa</button>
-
     </div>
   )
 }

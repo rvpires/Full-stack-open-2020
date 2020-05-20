@@ -127,22 +127,20 @@ const resolvers = {
 			else {
 
 				let books = await Book.find({}).then(result => (result))
-				console.log(books)
 				return books
 			}
 		},
 
 		allAuthors: async () => {
 
-			let authors = Author.find({})
+			let authors = await Author.find({})
 			return authors
 
 		},
 		
-		me : (root, args, context) =>
+		me : async (root, args, context) =>
 		{
-			console.log(context.currentUser)
-			return context.curentUser
+			return(context.currentUser)
 		}
 
 		
@@ -156,15 +154,15 @@ const resolvers = {
 			let foundAuthor = await Author.findOne({ name: root.name })
 			let foundBooks = await Book.find({ author: foundAuthor.id })
 			return (foundBooks.length)
-		},
+		},			
 	},
 
 	Book:
 	{
 		author: async root => {
 
-			let foundAuthor = await Author.findById(root.author)
-			return ({ name: foundAuthor.name, born: foundAuthor.born })
+			let foundAuthor = await Author.findById(root.author)			
+			return(foundAuthor)
 		}
 	},
 
@@ -244,7 +242,6 @@ const resolvers = {
 			if (foundAuthor) {
 
 				foundAuthor.born = args.setBornTo
-				console.log(foundAuthor)
 				await foundAuthor.save()
 				return foundAuthor
 			}
@@ -253,7 +250,6 @@ const resolvers = {
 
 		},
 		createUser: (root, args) => {
-			console.log(args)
 			const user = new User({ username: args.username , favouriteGenre : args.favouriteGenre})
 		
 			return user.save()
@@ -285,20 +281,20 @@ const server = new ApolloServer({
 	typeDefs,
 	resolvers,
 	context: async ({ req }) => {
-		const auth = req ? req.headers.authorization : null
-		if (auth && auth.toLowerCase().startsWith('bearer ')) {
-			const decodedToken = jwt.verify(
-			auth.substring(7), JWT_SECRET
-		  )
-
-		  const currentUser = await User
-			.findById(decodedToken.id)
-	
-		  return { currentUser }
-		}
-	  }  
-})
-
-server.listen().then(({ url }) => {
+	  const auth = req ? req.headers.authorization : null
+	  if (auth && auth.toLowerCase().startsWith('bearer ')) {
+		const decodedToken = jwt.verify(
+		  auth.substring(7), JWT_SECRET
+		)
+  
+		const currentUser = await User
+		  .findById(decodedToken.id)
+  
+		return { currentUser }
+	  }
+	}  
+  })
+  
+  server.listen().then(({ url }) => {
 	console.log(`Server ready at ${url}`)
-})
+  })
