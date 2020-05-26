@@ -6,6 +6,7 @@ const Author = require('./models/author')
 const Book = require('./models/book')
 const User = require('./models/user')
 
+
 mongoose.set('useFindAndModify', false)
 mongoose.set('useCreateIndex', true)
 mongoose.set('useUnifiedTopology', true)
@@ -84,8 +85,15 @@ type Mutation {
 	  username: String!
 	  password: String!
   ): Token
+}
 
-}`
+type Subscription {
+	addBook: Book!
+  }   
+`
+
+const { PubSub } = require('apollo-server')
+const pubsub = new PubSub()
 
 const resolvers = {
 	Query: {
@@ -93,8 +101,6 @@ const resolvers = {
 		authorCount: async () => {
 
 			return (await Author.find({}).then(result => result.length))
-
-
 		},
 
 		allBooks: async (root, args) => {
@@ -207,6 +213,7 @@ const resolvers = {
 					})
 
 					await newBook.save()
+					pubsub.publish('BOOK_ADDED', { addBook: newBook })
 					return newBook
 				}
 
@@ -219,6 +226,7 @@ const resolvers = {
 					})
 
 					await newBook.save()
+					pubsub.publish('BOOK_ADDED', { addBook: newBook })
 					return newBook
 
 				}
@@ -228,6 +236,9 @@ const resolvers = {
 					invalidArgs: args,
 				})
 			}
+
+
+
 		},
 
 		editAuthor: async (root, args, context) => {
@@ -274,6 +285,13 @@ const resolvers = {
 			return { value: jwt.sign(userForToken, JWT_SECRET) }
 		  }
 
+	},
+
+	Subscription: 
+	{
+		addBook: {
+		  subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
+		}
 	}
 }
 
@@ -295,6 +313,7 @@ const server = new ApolloServer({
 	}  
   })
   
-  server.listen().then(({ url }) => {
+  server.listen().then(({ url, subscriptionsUrl }) => {
 	console.log(`Server ready at ${url}`)
+	console.log(`Subscriptions ready at ${subscriptionsUrl}`)
   })

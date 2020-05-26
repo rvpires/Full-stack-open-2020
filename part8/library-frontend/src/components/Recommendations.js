@@ -26,19 +26,6 @@ const FILTERED_BOOKS = gql`
 		}		  
 	}`
 
-const ALL_BOOKS = gql`
-	query
-	{
-	  allBooks{
-		title, 
-		author
-		{
-		  name
-		}, 
-		published,
-		genres
-	  }
-	}`
 
 const Recommendations = (props) => {
 

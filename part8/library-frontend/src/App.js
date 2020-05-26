@@ -4,13 +4,33 @@ import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient , useSubscription , gql} from '@apollo/client'
 import Recommendations from './components/Recommendations'
+
 const App = () => {
   const [page, setPage] = useState('authors')
   const [token, setToken] = useState(null)
   const client = useApolloClient()
 
+  const  BOOK_ADDED = gql`
+  subscription
+  {
+    addBook
+    {
+      title, 
+      author
+      {
+        name
+      }
+    }
+  }
+  `
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      window.alert(`${subscriptionData.data.addBook.title} by ${subscriptionData.data.addBook.author.name} was added. `)
+    }
+  })
+  
   const logout = () => {
     setToken(null)
     localStorage.clear()
@@ -28,6 +48,7 @@ const App = () => {
     )
   }
 
+ 
 
   return (
     <div>
