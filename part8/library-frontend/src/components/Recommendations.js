@@ -26,6 +26,20 @@ const FILTERED_BOOKS = gql`
 		}		  
 	}`
 
+const ALL_BOOKS = gql`
+	query
+	{
+	  allBooks{
+		title, 
+		author
+		{
+		  name
+		}, 
+		published,
+		genres
+	  }
+	}`
+
 const Recommendations = (props) => {
 
 	console.log(props)
@@ -33,7 +47,7 @@ const Recommendations = (props) => {
 
 	const [user, setUser] = useState(null)
 	const userData = useQuery(USER)
-	const [getBooks, result] = useLazyQuery(FILTERED_BOOKS)
+	const [getBooks, result] = useLazyQuery(FILTERED_BOOKS) 
 
 
 	useEffect(() => {

@@ -11,10 +11,21 @@ mutation createBook($title : String! , $author : String! , $published : Int! , $
   ) {
     title
     }
-}
+}`
 
-
-`
+const ALL_BOOKS = gql`
+query
+{
+  allBooks{
+    title, 
+    author
+    {
+      name
+    }, 
+    published,
+    genres
+  }
+}`
 
 
 const NewBook = (props) => {
@@ -24,7 +35,12 @@ const NewBook = (props) => {
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
 
-  const [ createBook ] = useMutation(CREATE_BOOK) 
+  const [ createBook ] = useMutation(CREATE_BOOK , {
+    refetchQueries: [  {query: ALL_BOOKS} ],
+    onError: (error) => {
+      console.log(error.graphQLErrors[0].message)
+    }
+  }) 
 
 
   if (!props.show) {
