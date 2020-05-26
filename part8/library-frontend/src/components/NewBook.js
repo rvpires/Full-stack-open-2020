@@ -29,11 +29,11 @@ query
 
 
 const NewBook = (props) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuhtor] = useState('')
-  const [published, setPublished] = useState('')
+  const [title, setTitle] = useState('aaaaaaaaaa')
+  const [author, setAuhtor] = useState('aaaaaaaaaaaa')
+  const [published, setPublished] = useState('11111')
   const [genre, setGenre] = useState('')
-  const [genres, setGenres] = useState([])
+  const [genres, setGenres] = useState(['a'])
 
   const [ createBook ] = useMutation(CREATE_BOOK , {
     refetchQueries: [  {query: ALL_BOOKS} ],

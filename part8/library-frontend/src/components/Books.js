@@ -1,6 +1,6 @@
-import React , { useState  ,useEffect } from 'react'
-import { gql, useQuery } from '@apollo/client'
- 
+import React, { useState, useEffect } from 'react'
+import { gql, useQuery, useSubscription } from '@apollo/client'
+
 
 const ALL_BOOKS = gql`
 query
@@ -16,10 +16,29 @@ query
   }
 }`
 
+const BOOK_ADDED = gql`
+  subscription
+  {
+    addBook
+    {
+      title, 
+      author
+      {
+        name
+      },
+      published
+
+    }
+  }
+  `
+
+
+
 
 const Books = (props) => {
 
   const result = useQuery(ALL_BOOKS)
+
   const [books, setBooks] = useState(null)
 
   useEffect(() => {
@@ -28,35 +47,41 @@ const Books = (props) => {
     }
   }, [result.data])
 
+
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+
+      setBooks(books.concat(subscriptionData.addBook))
+    }
+  })
+
+
   if (!props.show) {
     return null
   }
 
-  if (result.loading || !books)  {
+  if (result.loading || !books) {
     return <div>loading...</div>
   }
-  
+
   let genres = []
 
   result.data.allBooks.forEach(book => {
 
     book.genres.forEach(genre => {
 
-      if(!genres.includes(genre))
-      {
+      if (!genres.includes(genre)) {
         genres = genres.concat(genre)
       }
-    })  
+    })
   })
 
 
-  const filterClicked = (event) =>
-  {
+  const filterClicked = (event) => {
     event.preventDefault()
     setBooks(result.data.allBooks)
     let genre = event.target.name
-    if(genre !== 'ALL')
-    {
+    if (genre !== 'ALL') {
       setBooks(result.data.allBooks.filter(book => book.genres.includes(genre)))
     }
 
