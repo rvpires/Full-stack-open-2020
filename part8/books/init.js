@@ -11,23 +11,28 @@ const MONGODB_URI = 'mongodb+srv://rvp:fullstack2020@cluster0-eyt6f.mongodb.net/
 let authors = [
 	{
 		name: 'Robert Martin',
-		born: 1952
+		born: 1952,
+		bookCount : 0
 	},
 	{
 		name: 'Martin Fowler',
-		born: 1963
+		born: 1963,
+		bookCount : 0
 	},
 	{
 		name: 'Fyodor Dostoevsky',
-		born: 1821
+		born: 1821,
+		bookCount : 0
 	},
 	{
 		name: 'Joshua Kerievsky',
-		born: null
+		born: null,
+		bookCount : 0
 	},
 	{
 		name: 'Sandi Metz',
-		born: null
+		born: null,
+		bookCount : 0
 	},
 ]
 
@@ -120,6 +125,9 @@ const main = async () => {
 	for (let k = 0; k < books.length; k++) {
 		
 		let foundAuthor = await Author.findOne({ name: books[k].author })
+
+		foundAuthor.bookCount = foundAuthor.bookCount + 1
+		await foundAuthor.save()
 		
 		let newBook = new Book({
 				title: books[k].title,

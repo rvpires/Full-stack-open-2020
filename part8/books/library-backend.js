@@ -103,9 +103,7 @@ const resolvers = {
 			return (await Author.find({}).then(result => result.length))
 		},
 
-		allBooks: async (root, args) => {
-
-			
+		allBooks: async (root, args) => {			
 
 			if (args.author && !args.genre) {
 
@@ -150,18 +148,7 @@ const resolvers = {
 		}
 
 		
-	},
-
-
-
-	Author:
-	{
-		bookCount: async root => {
-			let foundAuthor = await Author.findOne({ name: root.name })
-			let foundBooks = await Book.find({ author: foundAuthor.id })
-			return (foundBooks.length)
-		},			
-	},
+	},	
 
 	Book:
 	{
@@ -177,7 +164,7 @@ const resolvers = {
 		addAuthor: async (root, args) => {
 
 			try {
-				const author = new Author({ ...args })
+				const author = new Author({ ...args , bookCount : 0 })
 				await author.save()
 				return author
 
@@ -201,7 +188,7 @@ const resolvers = {
 				let foundAuthor = await Author.findOne({ name: args.author })
 
 				if (!foundAuthor) {
-					let newAuthor = new Author({ name: args.author, born: null })
+					let newAuthor = new Author({ name: args.author, born: null , bookCount : 1 })
 
 					await newAuthor.save()
 
@@ -218,6 +205,9 @@ const resolvers = {
 				}
 
 				else {
+
+					foundAuthor.bookCount = foundAuthor.bookCount + 1 
+					await foundAuthor.save()
 					let newBook = new Book({
 						title: args.title,
 						author: foundAuthor,
